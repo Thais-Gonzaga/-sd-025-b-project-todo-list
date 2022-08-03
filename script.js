@@ -54,3 +54,17 @@ function changeBackground(event) {
   click.style.background = 'grey';
 }
 idList.addEventListener('click', changeBackground);
+
+function checkClass(event) {
+  const completedClass = event.target.classList.contains('completed');
+  console.log(completedClass);
+  if (completedClass) event.target.classList.remove('completed');
+  return completedClass;
+}
+
+function strikethrough(event) {
+  const booleano = checkClass(event);
+  const click = event.target;
+  if (!booleano) click.classList.add('completed');
+}
+idList.addEventListener('dblclick', strikethrough);
