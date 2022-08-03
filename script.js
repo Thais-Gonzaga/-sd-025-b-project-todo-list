@@ -20,3 +20,23 @@ divInputButton.appendChild(input);
 const ol = document.createElement('ol');
 ol.id = 'lista-tarefas';
 document.body.appendChild(ol);
+
+const button = document.createElement('button');
+button.id = 'criar-tarefa';
+button.innerHTML = 'New Item';
+divInputButton.appendChild(button);
+
+function addNewItemList(newItem) {
+  const idList = document.getElementById('lista-tarefas');
+  const li = document.createElement('li');
+  idList.appendChild(li);
+  li.innerText = newItem;
+  console.log(li);
+}
+
+function buttonNewItem() {
+  const newItem = input.value;
+  addNewItemList(newItem);
+  input.value = '';
+}
+button.addEventListener('click', buttonNewItem);
