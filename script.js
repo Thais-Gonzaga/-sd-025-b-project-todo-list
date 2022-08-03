@@ -20,6 +20,7 @@ divInputButton.appendChild(input);
 const ol = document.createElement('ol');
 ol.id = 'lista-tarefas';
 document.body.appendChild(ol);
+const idList = document.getElementById('lista-tarefas');
 
 const button = document.createElement('button');
 button.id = 'criar-tarefa';
@@ -27,7 +28,6 @@ button.innerHTML = 'New Item';
 divInputButton.appendChild(button);
 
 function addNewItemList(newItem) {
-  const idList = document.getElementById('lista-tarefas');
   const li = document.createElement('li');
   idList.appendChild(li);
   li.innerText = newItem;
@@ -40,3 +40,9 @@ function buttonNewItem() {
   input.value = '';
 }
 button.addEventListener('click', buttonNewItem);
+
+function changeBackground(event) {
+  const click = event.target;
+  click.style.background = 'grey';
+}
+idList.addEventListener('click', changeBackground);
