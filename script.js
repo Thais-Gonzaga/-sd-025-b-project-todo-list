@@ -41,7 +41,15 @@ function buttonNewItem() {
 }
 button.addEventListener('click', buttonNewItem);
 
+function clearBackground() {
+  const tagLi = document.querySelectorAll('li');
+  for (let index = 0; index < tagLi.length; index += 1) {
+    tagLi[index].style.background = 'white';
+  }
+}
+
 function changeBackground(event) {
+  clearBackground();
   const click = event.target;
   click.style.background = 'grey';
 }
