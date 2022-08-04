@@ -62,6 +62,21 @@ function changeBackground(event) {
 }
 idList.addEventListener('click', changeBackground);
 
+function addRemove(event) {
+  event.target.classList.toggle('completed');
+}
+idList.addEventListener('dblclick', addRemove);
+
+function buttonDeleteAll() {
+  const tagOl = document.querySelector('ol');
+  const tagLi = document.querySelectorAll('li');
+  for (let index = 0; index < tagLi.length; index += 1) {
+    tagOl.removeChild(tagLi[index]);
+  }
+}
+const idApagaTudo = document.getElementById('apaga-tudo');
+idApagaTudo.addEventListener('click', buttonDeleteAll);
+
 // function checkClass(event) {
 //   const completedClass = event.target.classList.contains('completed');
 //   console.log(completedClass);
@@ -76,17 +91,17 @@ idList.addEventListener('click', changeBackground);
 // }
 // idList.addEventListener('dblclick', strikethrough);
 
-function addRemove(event) {
-  event.target.classList.toggle('completed');
+function checkClass(li) {
+  const completedClass = li.classList.contains('completed');
+  return completedClass;
 }
-idList.addEventListener('dblclick', addRemove);
 
-function buttonApagaTudo() {
+function buttonDeleteCheck() {
   const tagOl = document.querySelector('ol');
   const tagLi = document.querySelectorAll('li');
   for (let index = 0; index < tagLi.length; index += 1) {
-    tagOl.removeChild(tagLi[index]);
+    if (checkClass(tagLi[index])) tagOl.removeChild(tagLi[index]);
   }
 }
-const idApagaTudo = document.getElementById('apaga-tudo');
-idApagaTudo.addEventListener('click', buttonApagaTudo);
+const idRemoverFinalizado = document.getElementById('remover-finalizados');
+idRemoverFinalizado.addEventListener('click', buttonDeleteCheck);
