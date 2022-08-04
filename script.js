@@ -22,10 +22,16 @@ ol.id = 'lista-tarefas';
 document.body.appendChild(ol);
 const idList = document.getElementById('lista-tarefas');
 
-const button = document.createElement('button');
-button.id = 'criar-tarefa';
-button.innerHTML = 'New Item';
-divInputButton.appendChild(button);
+function createButton(id, text) {
+  const button = document.createElement('button');
+  button.id = id;
+  button.innerHTML = text;
+  divInputButton.appendChild(button);
+}
+createButton('criar-tarefa', 'New Item');
+createButton('apaga-tudo', 'Apagar todos');
+createButton('remover-finalizados', 'Remover finalizados');
+createButton('salvar-tarefas', 'Salvar tarefas');
 
 function addNewItemList(newItem) {
   const li = document.createElement('li');
@@ -39,7 +45,8 @@ function buttonNewItem() {
   addNewItemList(newItem);
   input.value = '';
 }
-button.addEventListener('click', buttonNewItem);
+const idCriarTarefas = document.getElementById('criar-tarefa');
+idCriarTarefas.addEventListener('click', buttonNewItem);
 
 function clearBackground() {
   const tagLi = document.querySelectorAll('li');
@@ -55,16 +62,31 @@ function changeBackground(event) {
 }
 idList.addEventListener('click', changeBackground);
 
-function checkClass(event) {
-  const completedClass = event.target.classList.contains('completed');
-  console.log(completedClass);
-  if (completedClass) event.target.classList.remove('completed');
-  return completedClass;
-}
+// function checkClass(event) {
+//   const completedClass = event.target.classList.contains('completed');
+//   console.log(completedClass);
+//   if (completedClass)
+//   return completedClass;
+// }
 
-function strikethrough(event) {
-  const booleano = checkClass(event);
-  const click = event.target;
-  if (!booleano) click.classList.add('completed');
+// function strikethrough(event) {
+//   const booleano = checkClass(event);
+//   const click = event.target;
+//   if (!booleano) click.classList.add('completed');
+// }
+// idList.addEventListener('dblclick', strikethrough);
+
+function addRemove(event) {
+  event.target.classList.toggle('completed');
 }
-idList.addEventListener('dblclick', strikethrough);
+idList.addEventListener('dblclick', addRemove);
+
+function buttonApagaTudo() {
+  const tagOl = document.querySelector('ol');
+  const tagLi = document.querySelectorAll('li');
+  for (let index = 0; index < tagLi.length; index += 1) {
+    tagOl.removeChild(tagLi[index]);
+  }
+}
+const idApagaTudo = document.getElementById('apaga-tudo');
+idApagaTudo.addEventListener('click', buttonApagaTudo);
