@@ -20,24 +20,24 @@ divInputButton.appendChild(input);
 const ol = document.createElement('ol');
 ol.id = 'lista-tarefas';
 document.body.appendChild(ol);
-const idList = document.getElementById('lista-tarefas');
+// const ol = document.getElementById('lista-tarefas');
 
 function createButton(id, text) {
   const button = document.createElement('button');
   button.id = id;
   button.innerHTML = text;
   divInputButton.appendChild(button);
+  return button;
 }
-createButton('criar-tarefa', 'New Item');
-createButton('apaga-tudo', 'Apagar todos');
-createButton('remover-finalizados', 'Remover finalizados');
-createButton('salvar-tarefas', 'Salvar tarefas');
+const createTaskButton = createButton('criar-tarefa', 'New Item');
+const clearAllTask = createButton('apaga-tudo', 'Apagar todos');
+const removeAllCompleted = createButton('remover-finalizados', 'Remover finalizados');
+const saveTask = createButton('salvar-tarefas', 'Salvar tarefas');
 
 function addNewItemList(newItem) {
   const li = document.createElement('li');
-  idList.appendChild(li);
+  ol.appendChild(li);
   li.innerText = newItem;
-  console.log(li);
 }
 
 function buttonNewItem() {
@@ -45,27 +45,27 @@ function buttonNewItem() {
   addNewItemList(newItem);
   input.value = '';
 }
-const idCriarTarefas = document.getElementById('criar-tarefa');
-idCriarTarefas.addEventListener('click', buttonNewItem);
+// const idCriarTarefas = document.getElementById('criar-tarefa');
+createTaskButton.addEventListener('click', buttonNewItem);
 
 function clearBackground() {
   const tagLi = document.querySelectorAll('li');
   for (let index = 0; index < tagLi.length; index += 1) {
-    tagLi[index].style.background = 'white';
+    tagLi[index].classList.remove('grey');
   }
 }
 
 function changeBackground(event) {
   clearBackground();
   const click = event.target;
-  click.style.background = 'grey';
+  click.classList.add('grey');
 }
-idList.addEventListener('click', changeBackground);
+ol.addEventListener('click', changeBackground);
 
 function addRemove(event) {
   event.target.classList.toggle('completed');
 }
-idList.addEventListener('dblclick', addRemove);
+ol.addEventListener('dblclick', addRemove);
 
 function buttonDeleteAll() {
   const tagOl = document.querySelector('ol');
@@ -74,34 +74,64 @@ function buttonDeleteAll() {
     tagOl.removeChild(tagLi[index]);
   }
 }
-const idApagaTudo = document.getElementById('apaga-tudo');
-idApagaTudo.addEventListener('click', buttonDeleteAll);
+clearAllTask.addEventListener('click', buttonDeleteAll);
 
-// function checkClass(event) {
-//   const completedClass = event.target.classList.contains('completed');
-//   console.log(completedClass);
-//   if (completedClass)
-//   return completedClass;
-// }
-
-// function strikethrough(event) {
-//   const booleano = checkClass(event);
-//   const click = event.target;
-//   if (!booleano) click.classList.add('completed');
-// }
-// idList.addEventListener('dblclick', strikethrough);
-
-function checkClass(li) {
+function checkClassCompleted(li) {
   const completedClass = li.classList.contains('completed');
   return completedClass;
+}
+
+function checkClassGrey(li) {
+  const colorClass = li.classList.contains('grey');
+  return colorClass;
 }
 
 function buttonDeleteCheck() {
   const tagOl = document.querySelector('ol');
   const tagLi = document.querySelectorAll('li');
   for (let index = 0; index < tagLi.length; index += 1) {
-    if (checkClass(tagLi[index])) tagOl.removeChild(tagLi[index]);
+    if (checkClassCompleted(tagLi[index])) tagOl.removeChild(tagLi[index]);
   }
 }
-const idRemoverFinalizado = document.getElementById('remover-finalizados');
-idRemoverFinalizado.addEventListener('click', buttonDeleteCheck);
+removeAllCompleted.addEventListener('click', buttonDeleteCheck);
+
+function buttonSalve() {
+  const tagli = document.querySelectorAll('li');
+  const array = [];
+  const arrayClass = [];
+  const arrayGrey = [];
+  for (let index = 0; index < tagli.length; index += 1) {
+    array.push(tagli[index].innerText);
+    if (checkClassCompleted(tagli[index])) arrayClass.push(index);
+    if (checkClassGrey(tagli[index])) arrayGrey.push(index);
+  }
+  localStorage.setItem('itens', JSON.stringify(array));
+  localStorage.setItem('completed', JSON.stringify(arrayClass));
+  localStorage.setItem('grey', JSON.stringify(arrayGrey));
+}
+saveTask.addEventListener('click', buttonSalve);
+
+function addClass(arrayCompleted, index) {
+  for (let i = 0; i < arrayCompleted.length; i += 1) {
+    const li = document.querySelectorAll('li');
+    if (index === arrayCompleted[i]) li[index].classList.add('completed');
+  }
+}
+function addClassColor(arrayGrey, index) {
+  for (let i = 0; i < arrayGrey.length; i += 1) {
+    const li = document.querySelectorAll('li');
+    if (index === arrayGrey[i]) li[index].classList.add('grey');
+  }
+}
+
+window.onload = function onload() {
+  const arrayItens = JSON.parse(localStorage.getItem('itens'));
+  const arrayCompleted = JSON.parse(localStorage.getItem('completed'));
+  const arrayGrey = JSON.parse(localStorage.getItem('grey'));
+  if (!arrayItens) return;
+  for (let index = 0; index < arrayItens.length; index += 1) {
+    addNewItemList(arrayItens[index]);
+    addClass(arrayCompleted, index);
+    addClassColor(arrayGrey, index);
+  }
+};
