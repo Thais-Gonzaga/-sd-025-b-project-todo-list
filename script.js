@@ -20,7 +20,6 @@ divInputButton.appendChild(input);
 const ol = document.createElement('ol');
 ol.id = 'lista-tarefas';
 document.body.appendChild(ol);
-// const ol = document.getElementById('lista-tarefas');
 
 function createButton(id, text) {
   const button = document.createElement('button');
@@ -33,6 +32,9 @@ const createTaskButton = createButton('criar-tarefa', 'New Item');
 const clearAllTask = createButton('apaga-tudo', 'Apagar todos');
 const removeAllCompleted = createButton('remover-finalizados', 'Remover finalizados');
 const saveTask = createButton('salvar-tarefas', 'Salvar tarefas');
+const moveUp = createButton('mover-cima', '⇑');
+const moveDown = createButton('mover-baixo', '⇓');
+const removeSeleted = createButton('remover-selecionado', 'Remover item selecionado');
 
 function addNewItemList(newItem) {
   const li = document.createElement('li');
@@ -45,7 +47,6 @@ function buttonNewItem() {
   addNewItemList(newItem);
   input.value = '';
 }
-// const idCriarTarefas = document.getElementById('criar-tarefa');
 createTaskButton.addEventListener('click', buttonNewItem);
 
 function clearBackground() {
@@ -123,6 +124,30 @@ function addClassColor(arrayGrey, index) {
     if (index === arrayGrey[i]) li[index].classList.add('grey');
   }
 }
+
+function up() {
+  const [colorClass] = document.getElementsByClassName('grey');
+  if (colorClass && colorClass.previousElementSibling) {
+    colorClass.previousElementSibling.insertAdjacentElement('beforebegin', colorClass);
+  }
+}
+moveUp.addEventListener('click', up);
+
+function down() {
+  const [colorClass] = document.getElementsByClassName('grey');
+  if (colorClass && colorClass.nextElementSibling) {
+    colorClass.nextElementSibling.insertAdjacentElement('afterend', colorClass);
+  }
+}
+moveDown.addEventListener('click', down);
+
+function removeItemSelected() {
+  const li = document.querySelectorAll('li');
+  for (let index = 0; index < li.length; index += 1) {
+    if (checkClassGrey(li[index])) li[index].remove();
+  }
+}
+removeSeleted.addEventListener('click', removeItemSelected);
 
 window.onload = function onload() {
   const arrayItens = JSON.parse(localStorage.getItem('itens'));
